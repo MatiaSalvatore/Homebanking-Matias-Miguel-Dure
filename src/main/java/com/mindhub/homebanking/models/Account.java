@@ -58,4 +58,10 @@ public class Account {
     public void setOwner(Client owner) {
         this.owner = owner;
     }
+
+    public long getId() {
+        return id;
+    }
+
+
 }

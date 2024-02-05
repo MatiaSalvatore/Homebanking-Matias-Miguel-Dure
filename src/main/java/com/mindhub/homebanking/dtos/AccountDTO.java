@@ -1,5 +1,7 @@
 package com.mindhub.homebanking.dtos;
 
+import com.mindhub.homebanking.models.Account;
+
 import java.time.LocalDate;
 
 public class AccountDTO {
@@ -8,11 +10,11 @@ public class AccountDTO {
     private LocalDate creationDate;
     private Double balance;
 
-    public AccountDTO(long id, String number, LocalDate creationDate, Double balance) {
-        this.id = id;
-        this.number = number;
-        this.creationDate = creationDate;
-        this.balance = balance;
+    public AccountDTO(Account account) {
+        this.id = account.getId();
+        this.number = account.getNumber();
+        this.creationDate = account.getCreationDate();
+        this.balance = account.getBalance();
     }
 
     public long getId() {
@@ -29,5 +31,8 @@ public class AccountDTO {
 
     public Double getBalance() {
         return balance;
+    }
+
+    public AccountDTO() {
     }
 }

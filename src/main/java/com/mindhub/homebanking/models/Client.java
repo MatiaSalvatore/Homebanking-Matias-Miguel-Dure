@@ -25,6 +25,7 @@ public class Client {
         firstName = first;
         lastName = last;
         email = mail;
+
     }
 
     public Set<Account> getAccounts() {
@@ -66,4 +67,5 @@ public class Client {
     public void setId(long id) {
         this.id = id;
     }
+
 }
