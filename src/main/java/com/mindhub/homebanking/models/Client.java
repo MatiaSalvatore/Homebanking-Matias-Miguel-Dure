@@ -27,6 +27,10 @@ public class Client {
         email = mail;
     }
 
+    public Set<Account> getAccounts() {
+        return accounts;
+    }
+
     public String getFirstName() {
         return firstName;
     }
