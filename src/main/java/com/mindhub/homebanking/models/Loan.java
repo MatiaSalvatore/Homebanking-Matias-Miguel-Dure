@@ -5,12 +5,13 @@ import jakarta.persistence.*;
 import java.util.List;
 import java.util.Set;
 
+import static java.util.stream.Collectors.toList;
+
 @Entity
 public class Loan {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO,generator="native")
     private long id;
-
     private String name;
     private Double maxAmount;
 
@@ -62,4 +63,10 @@ public class Loan {
         clientloan.setLoan(this);
         clientloans.add(clientloan);
     }
+
+    public List<Client> getClients() {
+        return clientloans.stream().map(sub -> sub.getClient()).collect(toList());
+    }
+
+
 }
