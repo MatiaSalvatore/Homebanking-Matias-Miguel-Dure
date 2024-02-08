@@ -75,8 +75,13 @@ public class Loan {
     }
 
     //Métodos
-
-
-
+    public void addClient(ClientLoan clientloan){
+        clientloan.setLoan(this);
+        this.clientloans.add(clientloan);
+    }
+    public List<Client> getClients() {
+        Set<ClientLoan> clientlist = this.getClientloans();
+        return clientlist.stream().map(sub -> sub.getClient()).collect(toList());
+    }
 
 }

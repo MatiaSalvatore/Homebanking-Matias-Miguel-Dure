@@ -52,6 +52,10 @@ public class HomebankingApplication {
 			clientOne.addAccount(accTwo);
 			clientTwo.addAccount(accTri);
 			clientTwo.addAccount(accFour);
+			clientOne.addLoan(clientloan1);
+			clientOne.addLoan(clientloan2);
+			clientTwo.addLoan(clientloan3);
+			clientTwo.addLoan(clientloan4);
 			accOne.addTransaction(t1);
 			accOne.addTransaction(t2);
 			accTwo.addTransaction(t3);
@@ -60,6 +64,10 @@ public class HomebankingApplication {
 			accTri.addTransaction(t6);
 			accFour.addTransaction(t7);
 			accFour.addTransaction(t8);
+			loan1.addClient(clientloan1);
+			loan2.addClient(clientloan2);
+			loan2.addClient(clientloan3);
+			loan2.addClient(clientloan4);
 
 
 
