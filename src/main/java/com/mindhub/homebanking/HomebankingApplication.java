@@ -1,11 +1,9 @@
 package com.mindhub.homebanking;
 
-import com.mindhub.homebanking.models.Account;
-import com.mindhub.homebanking.models.Client;
-import com.mindhub.homebanking.models.Transaction;
-import com.mindhub.homebanking.models.TransactionType;
+import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.repositories.LoanRepository;
 import com.mindhub.homebanking.repositories.TransactionRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @SpringBootApplication
 public class HomebankingApplication {
@@ -21,7 +20,7 @@ public class HomebankingApplication {
 		SpringApplication.run(HomebankingApplication.class, args);
 	}
 	@Bean
-	public CommandLineRunner initData(ClientRepository clientrepository, AccountRepository accountrepository, TransactionRepository transactionrepository){
+	public CommandLineRunner initData(ClientRepository clientrepository, AccountRepository accountrepository, TransactionRepository transactionrepository, LoanRepository loanrepository){
 		return args -> {
 			//Clients
 			Client clientOne = new Client("Matías","Dure","matiasmigueldure@gmail.com");
@@ -40,6 +39,17 @@ public class HomebankingApplication {
 			Transaction t6 = new Transaction(10000.0,LocalDate.now(),"Compra de Mercadolibre", TransactionType.DEBIT);
 			Transaction t7 = new Transaction(15000.0,LocalDate.now(),"Pago por trabajo", TransactionType.CREDIT);
 			Transaction t8 = new Transaction(8000.0,LocalDate.now(),"QUINI", TransactionType.CREDIT);
+			//Loans
+			Loan loan1 = new Loan("Mortage",800000.0, List.of( 12,24,36,48,60));
+			Loan loan2 = new Loan("Personal",100000.0,List.of( 12,24,36,48,60));
+			Loan loan3 = new Loan("Automotive",300000.0,List.of( 12,24,36,48,60));
+
+			//ClientLoan
+			ClientLoan clientloan1 = new ClientLoan(clientOne,loan1,400000.0,60);
+			ClientLoan clientloan2 = new ClientLoan(clientOne,loan2,400000.0,12);
+			ClientLoan clientloan3 = new ClientLoan(clientTwo,loan2,100000.0,24);
+			ClientLoan clientloan4 = new ClientLoan(clientTwo,loan2,200000.0,36);
+
 
 			clientOne.addAccount(accOne);
 			clientOne.addAccount(accTwo);
@@ -53,6 +63,11 @@ public class HomebankingApplication {
 			accTri.addTransaction(t6);
 			accFour.addTransaction(t7);
 			accFour.addTransaction(t8);
+			clientOne.addLoan(clientloan1);
+			clientOne.addLoan(clientloan2);
+			clientTwo.addLoan(clientloan3);
+			clientTwo.addLoan(clientloan4);
+
 
 
 
@@ -70,6 +85,9 @@ public class HomebankingApplication {
 			transactionrepository.save(t6);
 			transactionrepository.save(t7);
 			transactionrepository.save(t8);
+			loanrepository.save(loan1);
+			loanrepository.save(loan2);
+			loanrepository.save(loan3);
 
 		};
 	}
