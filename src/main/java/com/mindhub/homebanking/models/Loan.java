@@ -2,6 +2,7 @@ package com.mindhub.homebanking.models;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -9,23 +10,29 @@ import static java.util.stream.Collectors.toList;
 
 @Entity
 public class Loan {
+    //Propiedades
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO,generator="native")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
     private Double maxAmount;
-
     @ElementCollection
     @Column(name="payment")
     private List<Integer> payments;
     @OneToMany(mappedBy = "loan",fetch = FetchType.EAGER)
-    Set<ClientLoan> clientloans;
+    Set<ClientLoan> clientloans = new HashSet<>();
+
+    //Constructores
+    public Loan() {
+    }
 
     public Loan(String name, Double maxAmount, List<Integer> payments) {
         this.name = name;
         this.maxAmount = maxAmount;
         this.payments = payments;
     }
+
+    //Getters y setters
 
     public long getId() {
         return id;
@@ -59,14 +66,17 @@ public class Loan {
         this.payments = payments;
     }
 
-    public void addClientloan(ClientLoan clientloan){
-        clientloan.setLoan(this);
-        clientloans.add(clientloan);
+    public Set<ClientLoan> getClientloans() {
+        return clientloans;
     }
 
-    public List<Client> getClients() {
-        return clientloans.stream().map(sub -> sub.getClient()).collect(toList());
+    public void setClientloans(Set<ClientLoan> clientloans) {
+        this.clientloans = clientloans;
     }
+
+    //Métodos
+
+
 
 
 }

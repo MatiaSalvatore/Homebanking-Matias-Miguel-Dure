@@ -21,13 +21,11 @@ public class Client {
     Set<Account> accounts = new HashSet<>();
 
     @OneToMany(mappedBy = "client",fetch = FetchType.EAGER)
-    Set <ClientLoan> loans;
+    Set <ClientLoan> loans = new HashSet<>();
 
+    //Constructores
     public Client() { }
-    public void addAccount(Account account){
-        account.setOwner(this);
-        accounts.add(account);
-    }
+
     public Client(String first, String last,String mail) {
         firstName = first;
         lastName = last;
@@ -75,6 +73,11 @@ public class Client {
         this.id = id;
     }
 
+    //Métodos
+    public void addAccount(Account account){
+        account.setOwner(this);
+        accounts.add(account);
+    }
     public void addLoan(ClientLoan clientloan){
         clientloan.setClient(this);
         loans.add(clientloan);

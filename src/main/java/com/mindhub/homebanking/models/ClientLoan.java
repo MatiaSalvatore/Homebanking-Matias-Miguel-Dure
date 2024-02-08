@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 public class ClientLoan {
+    //Propiedades
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -20,9 +21,10 @@ public class ClientLoan {
 
     private Integer payments;
 
+    //Constructores
+
     public ClientLoan() {
     }
-
     public ClientLoan(Client client, Loan loan, Double amount, Integer payments) {
         this.client = client;
         this.loan = loan;
@@ -30,6 +32,7 @@ public class ClientLoan {
         this.payments = payments;
     }
 
+    //Setter y Getter
     public long getId() {
         return id;
     }
@@ -69,4 +72,11 @@ public class ClientLoan {
     public void setPayments(Integer payments) {
         this.payments = payments;
     }
+
+    //Métodos
+
+
+
 }
+
+
