@@ -69,10 +69,6 @@ public class HomebankingApplication {
 			loan2.addClient(clientloan3);
 			loan2.addClient(clientloan4);
 
-
-
-
-
 			clientrepository.save(clientOne);
 			clientrepository.save(clientTwo);
 			accountrepository.save(accOne);
@@ -94,7 +90,6 @@ public class HomebankingApplication {
 			clientloanrepository.save(clientloan2);
 			clientloanrepository.save(clientloan3);
 			clientloanrepository.save(clientloan4);
-
 		};
 	}
 }
