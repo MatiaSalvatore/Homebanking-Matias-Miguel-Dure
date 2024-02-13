@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     private String cardHolder;
     private String number;
     private String cvv;

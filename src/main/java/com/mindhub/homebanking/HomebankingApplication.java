@@ -20,7 +20,7 @@ public class HomebankingApplication {
 	public CommandLineRunner initData(ClientRepository clientrepository, AccountRepository accountrepository, TransactionRepository transactionrepository, LoanRepository loanrepository, ClientLoanRepository clientloanrepository, CardRepository cardrepository ){
 		return args -> {
 			//Clients
-			Client clientOne = new Client("Matías","Dure","matiasmigueldure@gmail.com");
+			Client clientOne = new Client("Melba","Morel","matiasmigueldure@gmail.com");
 			Client clientTwo = new Client("Gaby","Sosa","gabysosa@gmail.com");
 			//Accounts
 			Account accOne = new Account("A01", LocalDate.now(),5000.0);
