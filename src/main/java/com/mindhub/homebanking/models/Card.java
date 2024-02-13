@@ -1,9 +1,6 @@
 package com.mindhub.homebanking.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -19,6 +16,10 @@ public class Card {
     private CardColor color;
     private LocalDate fromDate;
     private LocalDate thruDate;
+
+    @ManyToOne
+    @JoinColumn(name="cardOwner_id")
+    private Client cardOwner;
 
     public Card() {
     }
@@ -94,5 +95,13 @@ public class Card {
 
     public void setThruDate(LocalDate thruDate) {
         this.thruDate = thruDate;
+    }
+
+    public Client getCardOwner() {
+        return cardOwner;
+    }
+
+    public void setCardOwner(Client cardOwner) {
+        this.cardOwner = cardOwner;
     }
 }
