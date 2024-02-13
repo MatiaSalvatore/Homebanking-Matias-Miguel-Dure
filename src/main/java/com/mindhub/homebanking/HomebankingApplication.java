@@ -20,7 +20,7 @@ public class HomebankingApplication {
 	public CommandLineRunner initData(ClientRepository clientrepository, AccountRepository accountrepository, TransactionRepository transactionrepository, LoanRepository loanrepository, ClientLoanRepository clientloanrepository, CardRepository cardrepository ){
 		return args -> {
 			//Clients
-			Client clientOne = new Client("Melba","Morel","matiasmigueldure@gmail.com");
+			Client clientOne = new Client("Melba","Morel","melba@mindhub.com");
 			Client clientTwo = new Client("Gaby","Sosa","gabysosa@gmail.com");
 			//Accounts
 			Account accOne = new Account("A01", LocalDate.now(),5000.0);
@@ -48,7 +48,9 @@ public class HomebankingApplication {
 			ClientLoan clientloan4 = new ClientLoan(clientTwo,loan2,200000.0,36);
 
 			//Cards
-			Card card1 = new Card("1513-4546-5464-4645","555",CardType.DEBIT,CardColor.GOLD,LocalDate.now(),LocalDate.now());
+			Card card1 = new Card("3325-6745-7876-4445","990",CardType.DEBIT,CardColor.GOLD,LocalDate.now(),LocalDate.now().plusYears(4));
+			Card card2 = new Card("2234-6745-552-7888","750",CardType.CREDIT,CardColor.TITANIUM,LocalDate.now(),LocalDate.now().plusYears(5));
+			Card card3 = new Card("5163-3836-1112-3735","841",CardType.CREDIT,CardColor.SILVER,LocalDate.now().minusMonths(5),LocalDate.now().plusYears(7));
 
 			clientOne.addAccount(accOne);
 			clientOne.addAccount(accTwo);
@@ -59,6 +61,8 @@ public class HomebankingApplication {
 			clientTwo.addLoan(clientloan3);
 			clientTwo.addLoan(clientloan4);
 			clientOne.addCard(card1);
+			clientOne.addCard(card2);
+			clientTwo.addCard(card3);
 			accOne.addTransaction(t1);
 			accOne.addTransaction(t2);
 			accTwo.addTransaction(t3);
@@ -94,6 +98,8 @@ public class HomebankingApplication {
 			clientloanrepository.save(clientloan3);
 			clientloanrepository.save(clientloan4);
 			cardrepository.save(card1);
+			cardrepository.save(card2);
+			cardrepository.save(card3);
 		};
 	}
 }
