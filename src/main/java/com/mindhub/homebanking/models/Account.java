@@ -16,6 +16,8 @@ public class Account {
     private Double balance;
 
 
+
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="owner_id")
     private Client owner;
