@@ -10,13 +10,19 @@ import java.util.Arrays;
 
 @Configuration
 public class CorsConfig {
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://localhost:3000"));
+
+        configuration.setAllowedOrigins(Arrays.asList("localhost:5173", "localhost:5000", "localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**",configuration);
+
         return source;
+
     }
+
 }

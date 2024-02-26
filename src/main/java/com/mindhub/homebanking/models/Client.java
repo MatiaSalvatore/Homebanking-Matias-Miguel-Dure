@@ -18,7 +18,7 @@ public class Client {
     private String firstName;
     private String lastName;
     private String email;
-    private String password;
+    private String password, username;
 
     private UserRoles Role;
 
@@ -36,19 +36,11 @@ public class Client {
     //Constructores
     public Client() { }
 
-    public Client(String first, String last,String mail) {
-        firstName = first;
-        lastName = last;
-        email = mail;
-
-    }
-
-    public Client(String first, String last,String mail,String password) {
-        this.firstName = first;
-        this.lastName = last;
-        this.email = mail;
+    public Client(String firstName, String lastName, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
         this.password = password;
-
     }
 
     public UserRoles getRole() {

@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.controllers;
 
+import com.mindhub.homebanking.configurations.WebConfig;
 import com.mindhub.homebanking.dtos.LoginDTO;
 import com.mindhub.homebanking.dtos.RegisterDTO;
 import com.mindhub.homebanking.models.Client;
@@ -22,38 +23,47 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
     @Autowired
     private AuthenticationManager authenticationManager;
+
     @Autowired
     private UserDetailsService userDetailsService;
+
     @Autowired
     private JwtUtilService jwtUtilService;
+
     @Autowired
     private ClientRepository clientRepository;
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login (@RequestBody LoginDTO loginDTO){
-        try{
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.mail(),loginDTO.password()));
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(loginDTO.mail());
+    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO){
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.email(),loginDTO.password()));
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(loginDTO.email());
             final String jwt = jwtUtilService.generateToken(userDetails);
             return ResponseEntity.ok(jwt);
-        }catch (Exception e){
-            return new ResponseEntity<>("MAl", HttpStatus.BAD_REQUEST);
+        }catch (Exception e) {
+            return new ResponseEntity<>("Incorrect", HttpStatus.BAD_REQUEST);
         }
 
     }
+
     @PostMapping("/register")
-    public ResponseEntity<?> register (@RequestBody RegisterDTO registerDTO){
-        Client client = new Client(
-                registerDTO.firstName(),
-                registerDTO.lastName(),
-                registerDTO.email(),
-                passwordEncoder.encode(registerDTO.password()));
-        clientRepository.save(client);
-        return ResponseEntity.ok(client);
+    public ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO){
+
+        if(registerDTO.firstName().isBlank() || registerDTO.lastName().isBlank() || registerDTO.password().isBlank() || registerDTO.email().isBlank()){
+            return new ResponseEntity<>("No data in field", HttpStatus.NOT_FOUND);
+        }
+
+        Client newClient = new Client(registerDTO.firstName(),registerDTO.lastName(),registerDTO.email(),registerDTO.password());
+        clientRepository.save(newClient);
+
+        return new ResponseEntity<>("Created", HttpStatus.CREATED);
+
     }
+
 }
