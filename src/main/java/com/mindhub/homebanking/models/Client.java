@@ -1,6 +1,7 @@
 package com.mindhub.homebanking.models;
 
 import com.mindhub.homebanking.dtos.ClientLoanDTO;
+import com.mindhub.homebanking.enums.UserRoles;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -17,6 +18,9 @@ public class Client {
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
+
+    private UserRoles Role;
 
     @OneToMany(mappedBy = "owner",fetch = FetchType.EAGER)
     Set<Account> accounts = new HashSet<>();
@@ -27,6 +31,8 @@ public class Client {
     @OneToMany(mappedBy = "cardOwner",fetch =FetchType.EAGER)
     Set<Card> cards  = new HashSet<>();
 
+
+
     //Constructores
     public Client() { }
 
@@ -35,6 +41,30 @@ public class Client {
         lastName = last;
         email = mail;
 
+    }
+
+    public Client(String first, String last,String mail,String password) {
+        this.firstName = first;
+        this.lastName = last;
+        this.email = mail;
+        this.password = password;
+
+    }
+
+    public UserRoles getRole() {
+        return Role;
+    }
+
+    public void setRole(UserRoles role) {
+        Role = role;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Set<Account> getAccounts() {
