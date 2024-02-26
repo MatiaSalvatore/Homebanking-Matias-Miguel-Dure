@@ -15,10 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -49,21 +46,21 @@ public class AuthController {
         }catch (Exception e) {
             return new ResponseEntity<>("Incorrect", HttpStatus.BAD_REQUEST);
         }
-
     }
-
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO){
-
-        if(registerDTO.firstName().isBlank() || registerDTO.lastName().isBlank() || registerDTO.password().isBlank() || registerDTO.email().isBlank()){
+        if(registerDTO.firstname().isBlank() || registerDTO.lastname().isBlank() || registerDTO.password().isBlank() || registerDTO.email().isBlank()){
             return new ResponseEntity<>("No data in field", HttpStatus.NOT_FOUND);
         }
 
-        Client newClient = new Client(registerDTO.firstName(),registerDTO.lastName(),registerDTO.email(),registerDTO.password());
+        Client newClient = new Client(registerDTO.firstname(),registerDTO.lastname(),registerDTO.email(),registerDTO.password());
         clientRepository.save(newClient);
-
         return new ResponseEntity<>("Created", HttpStatus.CREATED);
+    }
+
+
+
+
 
     }
 
-}
