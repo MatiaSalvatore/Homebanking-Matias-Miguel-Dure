@@ -53,14 +53,9 @@ public class AuthController {
             return new ResponseEntity<>("No data in field", HttpStatus.NOT_FOUND);
         }
 
-        Client newClient = new Client(registerDTO.firstname(),registerDTO.lastname(),registerDTO.email(),registerDTO.password());
+        Client newClient = new Client(registerDTO.firstname(),registerDTO.lastname(),registerDTO.email(),passwordEncoder.encode(registerDTO.password()));
         clientRepository.save(newClient);
         return new ResponseEntity<>("Created", HttpStatus.CREATED);
     }
-
-
-
-
-
     }
 
