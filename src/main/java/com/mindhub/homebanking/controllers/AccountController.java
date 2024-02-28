@@ -61,9 +61,8 @@ public class AccountController {
             return new ResponseEntity<>("You cannot have more than 3 accounts.",HttpStatus.FORBIDDEN);
         }
         Account newuseraccount = new Account("VIN-"+RandomNumberGenerator(), LocalDate.now(),0.0);
-        client.addAccount(newuseraccount);
         accountrepository.save(newuseraccount);
-        clientrepository.save(client);
+        client.addAccount(newuseraccount);
         return new ResponseEntity<>("The account was succesfully created",HttpStatus.CREATED);
     }
 }

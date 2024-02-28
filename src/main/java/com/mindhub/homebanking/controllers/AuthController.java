@@ -3,7 +3,9 @@ package com.mindhub.homebanking.controllers;
 import com.mindhub.homebanking.configurations.WebConfig;
 import com.mindhub.homebanking.dtos.LoginDTO;
 import com.mindhub.homebanking.dtos.RegisterDTO;
+import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
+import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.services.JwtUtilService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -34,8 +39,14 @@ public class AuthController {
     private ClientRepository clientRepository;
 
     @Autowired
+    private AccountRepository accountRepository;
+    @Autowired
     private PasswordEncoder passwordEncoder;
-
+    private int RandomNumberGenerator(){
+        Random rand = new Random();
+        int randomaccountnumber = rand.nextInt(100000);
+        return randomaccountnumber;
+    }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO){
         try {
@@ -55,6 +66,9 @@ public class AuthController {
 
         Client newClient = new Client(registerDTO.firstname(),registerDTO.lastname(),registerDTO.email(),passwordEncoder.encode(registerDTO.password()));
         clientRepository.save(newClient);
+        Account newuseraccount = new Account("VIN-"+RandomNumberGenerator(), LocalDate.now(),0.0);
+        newClient.addAccount(newuseraccount);
+        accountRepository.save(newuseraccount);
         return new ResponseEntity<>("Created", HttpStatus.CREATED);
     }
     }
