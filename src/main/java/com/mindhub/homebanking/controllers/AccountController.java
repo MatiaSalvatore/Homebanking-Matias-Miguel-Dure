@@ -5,13 +5,18 @@ import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
+import com.mindhub.homebanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
+
 
 @RestController
 @CrossOrigin(origins="*")
@@ -23,6 +28,14 @@ public class AccountController {
     }
     @Autowired
     private AccountRepository accountrepository;
+    @Autowired
+    private ClientRepository clientrepository;
+
+    private String RandomNumberGenerator(){
+        Random rand = new Random();
+        String randomaccountnumber = String.valueOf(rand.nextInt(100000));
+        return randomaccountnumber;
+    }
     @GetMapping("/")
     public ResponseEntity<List<AccountDTO>> obtainAccounts(){
         List<Account> clients = accountrepository.findAll();
@@ -37,5 +50,20 @@ public class AccountController {
         }
         AccountDTO accountDTO = new AccountDTO(account);
         return new ResponseEntity<>(accountDTO, HttpStatus.OK);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<?> addAccount(){
+        String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Client client = clientrepository.findByEmail(userMail);
+
+        if (client.getAccounts().size() >= 3){
+            return new ResponseEntity<>("You cannot have more than 3 accounts.",HttpStatus.FORBIDDEN);
+        }
+        Account newuseraccount = new Account("VIN-"+RandomNumberGenerator(), LocalDate.now(),0.0);
+        client.addAccount(newuseraccount);
+        accountrepository.save(newuseraccount);
+        clientrepository.save(client);
+        return new ResponseEntity<>("The account was succesfully created",HttpStatus.CREATED);
     }
 }
