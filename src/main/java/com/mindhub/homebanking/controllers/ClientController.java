@@ -83,6 +83,7 @@ public class ClientController {
     public ResponseEntity<?> getAccounts(){
         String usermail = SecurityContextHolder.getContext().getAuthentication().getName();
         Client client = clientRepository.findByEmail(usermail);
+        List
         return ResponseEntity.ok(new ClientDTO((client)).getAccounts());
     }
     @PostMapping("/current/accounts")
