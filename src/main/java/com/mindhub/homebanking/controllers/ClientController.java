@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -78,10 +79,19 @@ public class ClientController {
         return ResponseEntity.ok(new ClientDTO(client));
     }
 
+    @GetMapping("/current/accounts")
+    public ResponseEntity<?> getAccounts(){
+        String usermail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Client client = clientRepository.findByEmail(usermail);
+        return ResponseEntity.ok(new ClientDTO((client)).getAccounts());
+    }
     @PostMapping("/current/accounts")
     public ResponseEntity<?> addAccounts(){
         String usermail = SecurityContextHolder.getContext().getAuthentication().getName();
         Client client = clientRepository.findByEmail(usermail);
+        if (client.getAccounts().size() >= 3){
+            return new ResponseEntity<>("You cannot have more than 3 accounts.", HttpStatus.FORBIDDEN);
+        }
         Account newuseraccount = new Account("VIN-"+RandomNumberGenerator(), LocalDate.now(),0.0);
         client.addAccount(newuseraccount);
         accountRepository.save(newuseraccount);
@@ -93,11 +103,11 @@ public class ClientController {
         String usermail = SecurityContextHolder.getContext().getAuthentication().getName();
         Client client = clientRepository.findByEmail(usermail);
         if (client.getCards().size() >= 3){
-            return new ResponseEntity<>("You cannot have more than 3 cards.", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("You cannot have more than 3 cards of each type.", HttpStatus.FORBIDDEN);
         }
         Card newcard = new Card(rand4()+"-"+rand4()+"-"+rand4()+"-"+rand4(),
                 rand3(),
-                cardRequestDTO.cardType(),
+                cardRequestDTO.cardtype(),
                 cardRequestDTO.color(),
                 LocalDate.now(),
                 LocalDate.now().plusYears(8));

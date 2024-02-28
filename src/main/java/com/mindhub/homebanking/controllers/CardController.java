@@ -49,7 +49,7 @@ public class CardController {
         }
         Card newcard = new Card(rand4()+"-"+rand4()+"-"+rand4()+"-"+rand4(),
                 rand3(),
-                cardRequestDTO.cardType(),
+                cardRequestDTO.cardtype(),
                 cardRequestDTO.color(),
                 LocalDate.now(),
                 LocalDate.now().plusYears(8));
