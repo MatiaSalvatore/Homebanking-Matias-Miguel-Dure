@@ -42,11 +42,14 @@ public class AuthController {
     private AccountRepository accountRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    //Generador de número aleatorio para cuentas
     private int RandomNumberGenerator(){
         Random rand = new Random();
         int randomaccountnumber = rand.nextInt(100000);
         return randomaccountnumber;
     }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO){
         try {
@@ -60,16 +63,26 @@ public class AuthController {
     }
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO){
-        if(registerDTO.firstname().isBlank() || registerDTO.lastname().isBlank() || registerDTO.password().isBlank() || registerDTO.email().isBlank()){
-            return new ResponseEntity<>("No data in field", HttpStatus.NOT_FOUND);
+
+        //Corroboramos que un cliente con el mismo mail no exista:
+
+        Client firstCheck = clientRepository.findByEmail(registerDTO.email());
+        if (firstCheck != null){
+            return new ResponseEntity<>("Client already exists", HttpStatus.FORBIDDEN);
         }
+        //Corroboramos que se ingresen todos los datos
+
+        if(registerDTO.firstname().isBlank() || registerDTO.lastname().isBlank() || registerDTO.password().isBlank() || registerDTO.email().isBlank()){
+            return new ResponseEntity<>("Fill in all required fields before proceeding further.", HttpStatus.NOT_FOUND);
+        }
+
 
         Client newClient = new Client(registerDTO.firstname(),registerDTO.lastname(),registerDTO.email(),passwordEncoder.encode(registerDTO.password()));
         clientRepository.save(newClient);
         Account newuseraccount = new Account("VIN-"+RandomNumberGenerator(), LocalDate.now(),0.0);
         newClient.addAccount(newuseraccount);
         accountRepository.save(newuseraccount);
-        return new ResponseEntity<>("Created", HttpStatus.CREATED);
+        return new ResponseEntity<>("Client created", HttpStatus.CREATED);
     }
     }
 

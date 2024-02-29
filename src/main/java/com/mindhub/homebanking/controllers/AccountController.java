@@ -52,17 +52,4 @@ public class AccountController {
         return new ResponseEntity<>(accountDTO, HttpStatus.OK);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addAccount(){
-        String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Client client = clientrepository.findByEmail(userMail);
-
-        if (client.getAccounts().size() >= 3){
-            return new ResponseEntity<>("You cannot have more than 3 accounts.",HttpStatus.FORBIDDEN);
-        }
-        Account newuseraccount = new Account("VIN-"+RandomNumberGenerator(), LocalDate.now(),0.0);
-        accountrepository.save(newuseraccount);
-        client.addAccount(newuseraccount);
-        return new ResponseEntity<>("The account was succesfully created",HttpStatus.CREATED);
-    }
 }

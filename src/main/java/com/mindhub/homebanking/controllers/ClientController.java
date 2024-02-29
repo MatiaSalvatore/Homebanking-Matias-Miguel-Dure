@@ -1,6 +1,7 @@
 package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.AccountDTO;
+import com.mindhub.homebanking.dtos.CardDTO;
 import com.mindhub.homebanking.dtos.CardRequestDTO;
 import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
@@ -37,23 +38,28 @@ public class ClientController {
     private AccountRepository accountRepository;
     @Autowired
     private CardRepository cardRepository;
+
+    //Generador de número aleatorio para cuentas
     private int RandomNumberGenerator(){
         Random rand = new Random();
         int randomaccountnumber = rand.nextInt(100000);
         return randomaccountnumber;
     }
 
+    //Generador aleatorio de número de 4 dígitos (para tarjeta de crédito)
     private String rand4(){
         Random rand = new Random();
         String ramdom4digits = String.valueOf(rand.nextInt(9999));
         return ramdom4digits;
     }
 
+    //Generador aleatorio de números de 3 dígitos (para CVV)
     private String rand3(){
         Random rand = new Random();
         String ramdom3digits = String.valueOf(rand.nextInt(999));
         return ramdom3digits;
     }
+
 
     @GetMapping("/")
     public ResponseEntity<List<ClientDTO>> obtainClients(){
@@ -83,8 +89,8 @@ public class ClientController {
     public ResponseEntity<?> getAccounts(){
         String usermail = SecurityContextHolder.getContext().getAuthentication().getName();
         Client client = clientRepository.findByEmail(usermail);
-        List
-        return ResponseEntity.ok(new ClientDTO((client)).getAccounts());
+        Set<Account> accounts = client.getAccounts();
+        return new ResponseEntity<>(accounts.stream().map(AccountDTO::new).collect(Collectors.toList()), HttpStatus.OK);
     }
     @PostMapping("/current/accounts")
     public ResponseEntity<?> addAccounts(){
@@ -97,6 +103,13 @@ public class ClientController {
         client.addAccount(newuseraccount);
         accountRepository.save(newuseraccount);
         return ResponseEntity.ok("Account created");
+    }
+    @GetMapping("/current/cards")
+    public ResponseEntity<?> getCards(){
+        String usermail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Client client = clientRepository.findByEmail(usermail);
+        Set<Card> accounts = client.getCards();
+        return new ResponseEntity<>(accounts.stream().map(CardDTO::new).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @PostMapping("/current/cards")
