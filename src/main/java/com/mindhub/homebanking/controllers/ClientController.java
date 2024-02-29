@@ -4,9 +4,7 @@ import com.mindhub.homebanking.dtos.AccountDTO;
 import com.mindhub.homebanking.dtos.CardDTO;
 import com.mindhub.homebanking.dtos.CardRequestDTO;
 import com.mindhub.homebanking.dtos.ClientDTO;
-import com.mindhub.homebanking.models.Account;
-import com.mindhub.homebanking.models.Card;
-import com.mindhub.homebanking.models.Client;
+import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.CardRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
@@ -17,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -116,9 +115,24 @@ public class ClientController {
     public ResponseEntity<?> addCards(@RequestBody CardRequestDTO cardRequestDTO){
         String usermail = SecurityContextHolder.getContext().getAuthentication().getName();
         Client client = clientRepository.findByEmail(usermail);
-        if (client.getCards().size() >= 3){
+        Set<Card> cardlist = client.getCards();
+        Set<Card> debitCard = new HashSet<>();
+        Set<Card> creditCard = new HashSet<>();
+
+
+        for(Card card : cardlist){
+            if (card.getType() == CardType.CREDIT){
+                creditCard.add(card);
+            }
+            else if  (card.getType() == CardType.DEBIT){
+                debitCard.add(card);
+            }
+        }
+
+        if (cardRequestDTO.cardtype() == CardType.DEBIT && debitCard.size() >= 3 || cardRequestDTO.cardtype() == CardType.CREDIT && creditCard.size() >= 3){
             return new ResponseEntity<>("You cannot have more than 3 cards of each type.", HttpStatus.FORBIDDEN);
         }
+
         Card newcard = new Card(rand4()+"-"+rand4()+"-"+rand4()+"-"+rand4(),
                 rand3(),
                 cardRequestDTO.cardtype(),
