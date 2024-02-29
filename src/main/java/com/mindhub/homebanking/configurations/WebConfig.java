@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.configurations;
 
+import com.mindhub.homebanking.enums.UserRoles;
 import com.mindhub.homebanking.filters.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +31,8 @@ public class WebConfig {
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers("/api/auth/login","/api/auth/register","/h2-console/**","/api/clients").permitAll()
+                                .requestMatchers("/api/auth/login","/api/auth/register","/h2-console/**").permitAll()
+                                .requestMatchers("/api/clients","/api/accounts").hasRole(UserRoles.USER.toString())
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtRquestFilter, UsernamePasswordAuthenticationFilter.class)

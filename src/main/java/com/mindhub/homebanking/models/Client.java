@@ -18,9 +18,9 @@ public class Client {
     private String firstName;
     private String lastName;
     private String email;
-    private String password, username;
+    private String password;
 
-    private UserRoles Role;
+    private UserRoles role;
 
     @OneToMany(mappedBy = "owner",fetch = FetchType.EAGER)
     Set<Account> accounts = new HashSet<>();
@@ -44,11 +44,11 @@ public class Client {
     }
 
     public UserRoles getRole() {
-        return Role;
+        return role;
     }
 
     public void setRole(UserRoles role) {
-        Role = role;
+        this.role = role;
     }
 
     public String getPassword() {
@@ -114,6 +114,7 @@ public class Client {
     public Set<Card> getCards() {
         return cards;
     }
+
 
     //Métodos
     public void addAccount(Account account){

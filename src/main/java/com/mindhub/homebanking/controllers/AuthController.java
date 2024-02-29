@@ -3,6 +3,7 @@ package com.mindhub.homebanking.controllers;
 import com.mindhub.homebanking.configurations.WebConfig;
 import com.mindhub.homebanking.dtos.LoginDTO;
 import com.mindhub.homebanking.dtos.RegisterDTO;
+import com.mindhub.homebanking.enums.UserRoles;
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
@@ -76,12 +77,17 @@ public class AuthController {
             return new ResponseEntity<>("Fill in all required fields before proceeding further.", HttpStatus.NOT_FOUND);
         }
 
-
+        //Creo al cliente y lo guardo en el repo.
         Client newClient = new Client(registerDTO.firstname(),registerDTO.lastname(),registerDTO.email(),passwordEncoder.encode(registerDTO.password()));
+        newClient.setRole(UserRoles.USER);
         clientRepository.save(newClient);
+
+        //Creo la cuenta que viene con el cliente, lo linkeo al mismo y guardo en su respectivo repo.
+
         Account newuseraccount = new Account("VIN-"+RandomNumberGenerator(), LocalDate.now(),0.0);
         newClient.addAccount(newuseraccount);
         accountRepository.save(newuseraccount);
+
         return new ResponseEntity<>("Client created", HttpStatus.CREATED);
     }
     }

@@ -1,5 +1,6 @@
 package com.mindhub.homebanking;
 
+import com.mindhub.homebanking.enums.UserRoles;
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class HomebankingApplication {
 
 			//Login Test
 			Client melba = new Client( "Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("melba123"));
+			melba.setRole(UserRoles.USER);
 			clientrepository.save(melba);
 
 			//Clients
