@@ -34,9 +34,13 @@ public class TransactionController {
     ResponseEntity<?> postTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO){
         String usermail = SecurityContextHolder.getContext().getAuthentication().getName();
         Client client = clientRepository.findByEmail(usermail);
-        Set<Account> clientaccounts = client.getAccounts();
+        Set<Account> ogclientaccounts = client.getAccounts();
         Account ogAccount = accountRepository.findByNumber(transactionRequestDTO.ogAccount());
         Account destAccount = accountRepository.findByNumber(transactionRequestDTO.destAccount());
+
+        if (!ogclientaccounts.contains(ogAccount)){
+            return new ResponseEntity<>("The source account does not correspond to the authenticated user.",HttpStatus.FORBIDDEN);
+        }
 
         if (ogAccount.getBalance() < transactionRequestDTO.amount()){
             return new ResponseEntity<>("Not enough funds in source account.",HttpStatus.FORBIDDEN);
