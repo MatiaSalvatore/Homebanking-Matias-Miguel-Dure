@@ -29,8 +29,14 @@ public class TransactionController {
     @Transactional
     @PostMapping()
     ResponseEntity<?> postTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO){
-        if (transactionRequestDTO.amount() ||transactionRequestDTO.amount()||transactionRequestDTO.amount()||transactionRequestDTO.amount()){
+        if (transactionRequestDTO.ogAccount().isBlank()
+                ||transactionRequestDTO.destAccount().isBlank()
+                ||transactionRequestDTO.detail().isBlank()){
+            return new ResponseEntity<>("All fields must be completed.",HttpStatus.FORBIDDEN);
+        }
 
+        if (transactionRequestDTO.amount() <= 0){
+            return new ResponseEntity<>("You must specify an amount, it cannot be zero or negative",HttpStatus.FORBIDDEN);
         }
         Account ogAccount = accountRepository.findByNumber(transactionRequestDTO.ogAccount());
         Account destAccount = accountRepository.findByNumber(transactionRequestDTO.destAccount());
