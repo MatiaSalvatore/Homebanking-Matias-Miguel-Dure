@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account,Long> {
-    Client findByOwner(Client client);
+    Account findByNumber(String number);
+
 }
