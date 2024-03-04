@@ -44,14 +44,23 @@ public class LoanController {
         Loan currentLoan = loanRepository.findByname(loanRequestDTO.name());
         Account currentAccount = accountRepository.findByNumber(loanRequestDTO.accountNumber());
 
+        if (loanRequestDTO.amount().isNaN()||loanRequestDTO.name().isBlank()||loanRequestDTO.accountNumber().isBlank()||loanRequestDTO.payments() == null){
+            return new ResponseEntity<>("Fields cannot be empty",HttpStatus.FORBIDDEN);
+        }
+        if (!clientAccounts.contains(currentAccount)){
+            return new ResponseEntity<>("The specified account doesn't belong to the current Client",HttpStatus.FORBIDDEN);
+        }
+        if (currentAccount==null){
+            return new ResponseEntity<>("The specified account doesn't exist.",HttpStatus.FORBIDDEN);
+        }
         if (currentLoan == null){
-            return new ResponseEntity<>("That type of Loan doesnt exist",HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("That type of Loan doesn't exist.",HttpStatus.FORBIDDEN);
         }
         if (!currentLoan.getPayments().contains(loanRequestDTO.payments())){
-            return new ResponseEntity<>("Cannot set that amount of payments with that loan",HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Cannot set that amount of payments with that loan.",HttpStatus.FORBIDDEN);
         }
         if (currentLoan.getMaxAmount()<loanRequestDTO.amount()){
-            return new ResponseEntity<>("Max amount with tat loan exceeded",HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Max amount with tat loan exceeded.",HttpStatus.FORBIDDEN);
         }
 
 
