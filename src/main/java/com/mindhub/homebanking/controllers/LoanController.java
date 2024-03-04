@@ -47,7 +47,7 @@ public class LoanController {
         if (loanRequestDTO.amount().isNaN()||loanRequestDTO.name().isBlank()||loanRequestDTO.accountNumber().isBlank()||loanRequestDTO.payments() == null){
             return new ResponseEntity<>("Fields cannot be empty",HttpStatus.FORBIDDEN);
         }
-        if (!clientAccounts.contains(currentAccount)){
+        if (!client.getAccounts().contains(currentAccount)){
             return new ResponseEntity<>("The specified account doesn't belong to the current Client",HttpStatus.FORBIDDEN);
         }
         if (currentAccount==null){
