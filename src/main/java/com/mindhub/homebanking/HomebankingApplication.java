@@ -40,6 +40,8 @@ public class HomebankingApplication {
 			clientrepository.save(matias);
 			accountrepository.save(accTwo);
 
+			Loan loan1 = new Loan("Mortage",800000.0, List.of( 12,24,36,48,60));
+			loanrepository.save(loan1);
 
 			//Clients
 			/* Client clientOne = new Client("Melba","Morel","melba@mindhub.com");
