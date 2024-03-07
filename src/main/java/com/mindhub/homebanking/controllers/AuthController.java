@@ -57,6 +57,9 @@ public class AuthController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.email(),loginDTO.password()));
             final UserDetails userDetails = userDetailsService.loadUserByUsername(loginDTO.email());
             final String jwt = jwtUtilService.generateToken(userDetails);
+            Client client = clientRepository.findByEmail(loginDTO.email());
+            //Agregar validaciones de LOGIN
+
             return ResponseEntity.ok(jwt);
         }catch (Exception e) {
             return new ResponseEntity<>("Incorrect", HttpStatus.BAD_REQUEST);
@@ -89,6 +92,8 @@ public class AuthController {
         accountRepository.save(newuseraccount);
 
         return new ResponseEntity<>("Client created", HttpStatus.CREATED);
+
+
     }
     }
 
