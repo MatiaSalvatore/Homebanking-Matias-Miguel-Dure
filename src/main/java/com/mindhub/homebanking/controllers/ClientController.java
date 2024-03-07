@@ -41,7 +41,7 @@ public class ClientController {
     //Generador de número aleatorio para cuentas
     private int RandomNumberGenerator(){
         Random rand = new Random();
-        int randomaccountnumber = rand.nextInt(100000);
+        int randomaccountnumber = 10000000 + rand.nextInt(90000000);
         return randomaccountnumber;
     }
 
@@ -93,12 +93,17 @@ public class ClientController {
     }
     @PostMapping("/current/accounts")
     public ResponseEntity<?> addAccounts(){
+        String accountnumber = "VIN-"+RandomNumberGenerator();
+        if (accountRepository.findByNumber(accountnumber) != null){
+            accountnumber = "VIN-"+RandomNumberGenerator();
+        }
         String usermail = SecurityContextHolder.getContext().getAuthentication().getName();
         Client client = clientRepository.findByEmail(usermail);
+
         if (client.getAccounts().size() >= 3){
             return new ResponseEntity<>("You cannot have more than 3 accounts.", HttpStatus.FORBIDDEN);
         }
-        Account newuseraccount = new Account("VIN-"+RandomNumberGenerator(), LocalDate.now(),0.0);
+        Account newuseraccount = new Account(accountnumber, LocalDate.now(),0.0);
         client.addAccount(newuseraccount);
         accountRepository.save(newuseraccount);
         return ResponseEntity.ok("Account created");

@@ -47,7 +47,7 @@ public class AuthController {
     //Generador de número aleatorio para cuentas
     private int RandomNumberGenerator(){
         Random rand = new Random();
-        int randomaccountnumber = rand.nextInt(100000);
+        int randomaccountnumber = 10000000 + rand.nextInt(90000000);
         return randomaccountnumber;
     }
 

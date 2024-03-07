@@ -27,7 +27,7 @@ public class HomebankingApplication {
 			//Transaction test
 			Client melba = new Client( "Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("melba123"));
 			melba.setRole(UserRoles.USER);
-			Account accOne = new Account("VIN-1120", LocalDate.now(),5000.0);
+			Account accOne = new Account("VIN-11202348", LocalDate.now(),5000.0);
 			melba.addAccount(accOne);
 			clientrepository.save(melba);
 			accountrepository.save(accOne);
@@ -35,7 +35,7 @@ public class HomebankingApplication {
 
 			Client matias = new Client( "Matias", "Dure", "matiasmigueldure@mindhub.com", passwordEncoder.encode("mati123"));
 			matias.setRole(UserRoles.USER);
-			Account accTwo = new Account("VIN-1128", LocalDate.now().plusDays(1),7500.0);
+			Account accTwo = new Account("VIN-11285381", LocalDate.now().plusDays(1),7500.0);
 			matias.addAccount(accTwo);
 			clientrepository.save(matias);
 			accountrepository.save(accTwo);
