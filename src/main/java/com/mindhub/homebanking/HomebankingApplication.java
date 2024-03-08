@@ -25,7 +25,7 @@ public class HomebankingApplication {
 		return args -> {
 
 			//Transaction test
-			Client melba = new Client( "Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("melba123"));
+			/*Client melba = new Client( "Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("melba123"));
 			melba.setRole(UserRoles.USER);
 			Account accOne = new Account("VIN-11202348", LocalDate.now(),5000.0);
 			melba.addAccount(accOne);
@@ -42,7 +42,7 @@ public class HomebankingApplication {
 
 			Loan loan1 = new Loan("Mortage",800000.0, List.of( 12,24,36,48,60));
 			loanrepository.save(loan1);
-
+*/
 			//Clients
 			/* Client clientOne = new Client("Melba","Morel","melba@mindhub.com");
 			Client clientTwo = new Client("Gaby","Sosa","gabysosa@gmail.com");
