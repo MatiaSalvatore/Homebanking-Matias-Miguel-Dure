@@ -6,6 +6,7 @@ import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,8 @@ public class AccountController {
     private AccountRepository accountrepository;
     @Autowired
     private ClientRepository clientrepository;
-
+    @Autowired
+    private ClientService clientService;
     private String RandomNumberGenerator(){
         Random rand = new Random();
         String randomaccountnumber = String.valueOf(rand.nextInt(100000));

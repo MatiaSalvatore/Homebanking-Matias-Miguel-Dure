@@ -4,6 +4,7 @@ import com.mindhub.homebanking.dtos.LoanDTO;
 import com.mindhub.homebanking.dtos.LoanRequestDTO;
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.*;
+import com.mindhub.homebanking.services.ClientService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,8 @@ public class LoanController {
     private LoanRepository loanRepository;
 
     @Autowired
+    private ClientService clientService;
+    @Autowired
     ClientLoanRepository clientLoanRepository;
 
     /*@GetMapping()
@@ -39,7 +42,7 @@ public class LoanController {
     @PostMapping()
     ResponseEntity<?> postLoan(@RequestBody LoanRequestDTO loanRequestDTO){
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Client client = clientRepository.findByEmail(userEmail);
+        Client client = clientService.getClientByEmail(userEmail);
         List<String> clientAccounts = client.getAccounts().stream().map(Account::getNumber).toList();
         Loan currentLoan = loanRepository.findByname(loanRequestDTO.name());
         Account currentAccount = accountRepository.findByNumber(loanRequestDTO.accountNumber());

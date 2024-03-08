@@ -8,6 +8,7 @@ import com.mindhub.homebanking.models.TransactionType;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.repositories.TransactionRepository;
+import com.mindhub.homebanking.services.ClientService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,9 @@ import java.util.Set;
 public class TransactionController {
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private ClientService clientService;
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
@@ -33,7 +37,7 @@ public class TransactionController {
     @PostMapping()
     ResponseEntity<?> postTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO){
         String usermail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Client client = clientRepository.findByEmail(usermail);
+        Client client = clientService.getClientByEmail(usermail);
         Set<Account> ogclientaccounts = client.getAccounts();
         Account ogAccount = accountRepository.findByNumber(transactionRequestDTO.ogAccount());
         Account destAccount = accountRepository.findByNumber(transactionRequestDTO.destAccount());

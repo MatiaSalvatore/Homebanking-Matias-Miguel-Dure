@@ -8,6 +8,7 @@ import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.CardRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,9 @@ public class ClientController {
     @Autowired
     private CardRepository cardRepository;
 
+    @Autowired
+    private ClientService clientService;
+
     //Generador de número aleatorio para cuentas
     private int RandomNumberGenerator(){
         Random rand = new Random();
@@ -62,13 +66,14 @@ public class ClientController {
 
     @GetMapping("/")
     public ResponseEntity<List<ClientDTO>> obtainClients(){
-        List<Client> clients = clientRepository.findAll();
-        return new ResponseEntity<>(clients.stream().map(ClientDTO::new).collect(Collectors.toList()), HttpStatus.OK);
+        /*List<Client> clients = clientRepository.findAll();
+        return new ResponseEntity<>(clients.stream().map(ClientDTO::new).collect(Collectors.toList()), HttpStatus.OK);*/
+        return new ResponseEntity<>(clientService.getAllCLientsDTO(),HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> obtainClientById(@PathVariable Long id){
-        Client client = clientRepository.findById(id).orElse(null);
+        Client client = clientService.getClientById(id);
 
         if (client == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Client not found, sorry, try again later!");
@@ -80,14 +85,14 @@ public class ClientController {
     @GetMapping("/current")
     public ResponseEntity<?> getClient(){
         String usermail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Client client = clientRepository.findByEmail(usermail);
+        Client client = clientService.getClientByEmail(usermail);
         return ResponseEntity.ok(new ClientDTO(client));
     }
 
     @GetMapping("/current/accounts")
     public ResponseEntity<?> getAccounts(){
         String usermail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Client client = clientRepository.findByEmail(usermail);
+        Client client = clientService.getClientByEmail(usermail);
         Set<Account> accounts = client.getAccounts();
         return new ResponseEntity<>(accounts.stream().map(AccountDTO::new).collect(Collectors.toList()), HttpStatus.OK);
     }
@@ -98,7 +103,7 @@ public class ClientController {
             accountnumber = "VIN-"+RandomNumberGenerator();
         }
         String usermail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Client client = clientRepository.findByEmail(usermail);
+        Client client = clientService.getClientByEmail(usermail);
 
         if (client.getAccounts().size() >= 3){
             return new ResponseEntity<>("You cannot have more than 3 accounts.", HttpStatus.FORBIDDEN);
@@ -111,7 +116,7 @@ public class ClientController {
     @GetMapping("/current/cards")
     public ResponseEntity<?> getCards(){
         String usermail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Client client = clientRepository.findByEmail(usermail);
+        Client client = clientService.getClientByEmail(usermail);
         Set<Card> accounts = client.getCards();
         return new ResponseEntity<>(accounts.stream().map(CardDTO::new).collect(Collectors.toList()), HttpStatus.OK);
     }
@@ -119,7 +124,7 @@ public class ClientController {
     @PostMapping("/current/cards")
     public ResponseEntity<?> addCards(@RequestBody CardRequestDTO cardRequestDTO){
         String usermail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Client client = clientRepository.findByEmail(usermail);
+        Client client = clientService.getClientByEmail(usermail);
         Set<Card> cardlist = client.getCards();
         Set<Card> debitCard = new HashSet<>();
         Set<Card> creditCard = new HashSet<>();

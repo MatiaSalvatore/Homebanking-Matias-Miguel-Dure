@@ -1,7 +1,5 @@
-package com.mindhub.homebanking.services;
+package com.mindhub.homebanking.securityServices;
 
-import com.mindhub.homebanking.enums.UserRoles;
-import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;

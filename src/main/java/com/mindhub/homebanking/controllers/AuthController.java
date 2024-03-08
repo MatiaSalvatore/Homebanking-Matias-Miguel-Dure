@@ -1,6 +1,5 @@
 package com.mindhub.homebanking.controllers;
 
-import com.mindhub.homebanking.configurations.WebConfig;
 import com.mindhub.homebanking.dtos.LoginDTO;
 import com.mindhub.homebanking.dtos.RegisterDTO;
 import com.mindhub.homebanking.enums.UserRoles;
@@ -8,9 +7,9 @@ import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
-import com.mindhub.homebanking.services.JwtUtilService;
+import com.mindhub.homebanking.securityServices.JwtUtilService;
+import com.mindhub.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,6 +39,8 @@ public class AuthController {
     private ClientRepository clientRepository;
 
     @Autowired
+    private ClientService clientService;
+    @Autowired
     private AccountRepository accountRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -57,7 +58,7 @@ public class AuthController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.email(),loginDTO.password()));
             final UserDetails userDetails = userDetailsService.loadUserByUsername(loginDTO.email());
             final String jwt = jwtUtilService.generateToken(userDetails);
-            Client client = clientRepository.findByEmail(loginDTO.email());
+            Client client = clientService.getClientByEmail(loginDTO.email());
             //Agregar validaciones de LOGIN
 
             return ResponseEntity.ok(jwt);
@@ -70,7 +71,7 @@ public class AuthController {
 
         //Corroboramos que un cliente con el mismo mail no exista:
 
-        Client firstCheck = clientRepository.findByEmail(registerDTO.email());
+        Client firstCheck = clientService.getClientByEmail(registerDTO.email());
         if (firstCheck != null){
             return new ResponseEntity<>("Client already exists", HttpStatus.FORBIDDEN);
         }
