@@ -30,8 +30,6 @@ public class AccountController {
     @Autowired
     private AccountRepository accountrepository;
     @Autowired
-    private ClientRepository clientrepository;
-    @Autowired
     private ClientService clientService;
     private String RandomNumberGenerator(){
         Random rand = new Random();

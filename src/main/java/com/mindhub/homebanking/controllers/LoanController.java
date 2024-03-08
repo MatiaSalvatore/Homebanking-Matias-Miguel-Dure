@@ -20,8 +20,6 @@ import java.util.List;
 @RequestMapping("/api/loans")
 public class LoanController {
     @Autowired
-    private ClientRepository clientRepository;
-    @Autowired
     private AccountRepository accountRepository;
     @Autowired
     private TransactionRepository transactionRepository;

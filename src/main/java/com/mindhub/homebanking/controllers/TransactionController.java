@@ -23,8 +23,6 @@ import java.util.Set;
 @CrossOrigin(origins="*")
 @RequestMapping("/api/transactions")
 public class TransactionController {
-    @Autowired
-    private ClientRepository clientRepository;
 
     @Autowired
     private ClientService clientService;

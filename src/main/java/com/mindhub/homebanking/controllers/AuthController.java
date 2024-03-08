@@ -35,8 +35,6 @@ public class AuthController {
     @Autowired
     private JwtUtilService jwtUtilService;
 
-    @Autowired
-    private ClientRepository clientRepository;
 
     @Autowired
     private ClientService clientService;
@@ -84,7 +82,7 @@ public class AuthController {
         //Creo al cliente y lo guardo en el repo.
         Client newClient = new Client(registerDTO.firstname(),registerDTO.lastname(),registerDTO.email(),passwordEncoder.encode(registerDTO.password()));
         newClient.setRole(UserRoles.USER);
-        clientRepository.save(newClient);
+        clientService.saveCLient(newClient);
 
         //Creo la cuenta que viene con el cliente, lo linkeo al mismo y guardo en su respectivo repo.
 

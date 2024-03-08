@@ -32,13 +32,11 @@ public class ClientController {
     public String getClients(){
         return "Hello Clients!";
     }
-    @Autowired
-    private ClientRepository clientRepository;
+
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
     private CardRepository cardRepository;
-
     @Autowired
     private ClientService clientService;
 
