@@ -25,7 +25,9 @@ import java.util.Random;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-
+    //TODO: modulizar código (ver que cosas comparten que para hacer un service).
+    //TODO: modularizar hacer try catch en todos mis lineamientos.
+    //TODO: TESTING.
     @Autowired
     private AuthenticationManager authenticationManager;
 
